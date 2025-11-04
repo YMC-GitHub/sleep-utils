@@ -10,6 +10,7 @@ use std::time::Duration;
 ///
 /// - **Numbers**: `100`, `500` (interpreted as milliseconds)
 /// - **Text with units**: `"100ms"`, `"2s"`, `"1.5s"`, `"2 minutes"`
+/// - **Multiple units**: `"1m30s"`, `"1h2m3s"`, `"2s500ms"`
 /// - **Plain text**: `"100"` (interpreted as milliseconds)
 /// - **Duration objects**: `Duration::from_millis(100)`
 /// - **Zero/negative**: `0`, `-100` (no sleep performed)
@@ -19,17 +20,20 @@ use std::time::Duration;
 /// ```
 /// use sleep_utils::smart_sleep;
 ///
-/// // Sleep for 100 milliseconds using a number
-/// smart_sleep(100).unwrap();
+/// // Sleep for 1 millisecond using a number
+/// smart_sleep(1).unwrap();
 ///
-/// // Sleep for 200 milliseconds using text with units
-/// smart_sleep("200ms").unwrap();
+/// // Sleep for 1 millisecond using text with units
+/// smart_sleep("1ms").unwrap();
 ///
-/// // Sleep for 1.5 seconds
-/// smart_sleep("1.5s").unwrap();
+/// // Sleep for 0.001 seconds
+/// smart_sleep("0.001s").unwrap();
 ///
-/// // Sleep for 2 seconds with full unit name
-/// smart_sleep("2 seconds").unwrap();
+/// // Sleep for 1 millisecond with full unit name
+/// smart_sleep("1 millisecond").unwrap();
+///
+/// // Sleep using combined units
+/// smart_sleep("1s1ms").unwrap(); // 1 second 1 millisecond
 ///
 /// // No sleep for zero values
 /// smart_sleep(0).unwrap();
@@ -122,7 +126,7 @@ impl SleepInput {
     /// ```
     /// use sleep_utils::SleepInput;
     ///
-    /// let positive = SleepInput::from(100);
+    /// let positive = SleepInput::from(1);
     /// assert!(positive.should_sleep());
     ///
     /// let zero = SleepInput::from(0);
@@ -160,9 +164,9 @@ impl SleepInput {
     /// use sleep_utils::SleepInput;
     /// use std::time::Duration;
     ///
-    /// let input = SleepInput::from("100ms");
+    /// let input = SleepInput::from("1ms");
     /// let duration = input.to_duration().unwrap();
-    /// assert_eq!(duration, Duration::from_millis(100));
+    /// assert_eq!(duration, Duration::from_millis(1));
     /// ```
     pub fn to_duration(&self) -> Result<Duration> {
         match self {

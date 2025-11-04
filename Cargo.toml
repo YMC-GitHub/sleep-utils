@@ -1,6 +1,6 @@
 [package]
 name = "sleep-utils"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Smart sleep utilities with flexible input formats and automatic zero-value handling"
 authors = ["YeMiancheng <ymc.github@gmail.com>"]

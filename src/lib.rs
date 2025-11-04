@@ -7,7 +7,8 @@
 //!
 //! - **Multiple input formats**: numbers, text, `Duration` objects
 //! - **Automatic zero/negative handling**: no sleep for zero or negative values
-//! - **Multiple time units**: milliseconds, seconds, minutes
+//! - **Multiple time units**: milliseconds, seconds, minutes, hours
+//! - **Combined units**: support for formats like `"1m30s"`, `"1h2m3s"`
 //! - **Platform compatibility**: uses `isize` for cross-platform support
 //! - **High performance**: optimized regex parsing with lazy static patterns
 //!
@@ -19,17 +20,20 @@
 //! use sleep_utils::smart_sleep;
 //! use std::time::Duration;
 //!
-//! // Sleep for 100 milliseconds using a number
-//! smart_sleep(100).unwrap();
+//! // Sleep for 1 millisecond using a number
+//! smart_sleep(1).unwrap();
 //!
-//! // Sleep for 200 milliseconds using text with units
-//! smart_sleep("200ms").unwrap();
+//! // Sleep for 1 millisecond using text with units
+//! smart_sleep("1ms").unwrap();
 //!
-//! // Sleep for 1.5 seconds
-//! smart_sleep("1.5s").unwrap();
+//! // Sleep for 0.001 seconds
+//! smart_sleep("0.001s").unwrap();
 //!
-//! // Sleep for 2 seconds with full unit name
-//! smart_sleep("2 seconds").unwrap();
+//! // Sleep for 1 millisecond with full unit name
+//! smart_sleep("1 millisecond").unwrap();
+//!
+//! // Sleep using combined units
+//! smart_sleep("1s1ms").unwrap(); // 1 second 1 millisecond
 //!
 //! // No sleep for zero values
 //! smart_sleep(0).unwrap();
@@ -38,7 +42,7 @@
 //! smart_sleep(-50).unwrap();
 //!
 //! // Sleep using Duration object
-//! smart_sleep(Duration::from_secs(1)).unwrap();
+//! smart_sleep(Duration::from_millis(1)).unwrap();
 //! ```
 //!
 //! # Errors
@@ -72,8 +76,8 @@ pub use smart_sleep::{smart_sleep, SleepInput};
 /// use sleep_utils::sleep;
 /// use std::time::Duration;
 ///
-/// // Sleep for 100 milliseconds
-/// sleep(Duration::from_millis(100)).unwrap();
+/// // Sleep for 1 millisecond
+/// sleep(Duration::from_millis(1)).unwrap();
 /// ```
 ///
 /// # Notes
@@ -93,9 +97,9 @@ mod tests {
     #[test]
     fn test_basic_sleep() -> Result<()> {
         let start = Instant::now();
-        smart_sleep(50)?;
+        smart_sleep(1)?; // Use minimal sleep time for tests
         let elapsed = start.elapsed();
-        assert!(elapsed >= Duration::from_millis(40));
+        assert!(elapsed >= Duration::from_millis(1));
         Ok(())
     }
 }
